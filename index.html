@@ -54,6 +54,7 @@
                         ];
                         const contract = new ethers.Contract(contractAddress, abi, signer);
                         try {
+                            console.log('Sending transaction...');
                             const tx = await contract.mint(await signer.getAddress(), 1, 1, "0x", {
                                 gasLimit: ethers.utils.hexlify(1000000)
                             });
