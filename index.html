@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mint NFT</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+</head>
+<body>
+    <button id="connectButton">Connect MetaMask</button>
+    <button id="mintButton" disabled>Mint NFT</button>
+
+    <script>
+        async function connectMetaMask() {
+            if (typeof window.ethereum !== 'undefined') {
+                console.log('MetaMask is installed!');
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+                try {
+                    // Запрос доступа к учетной записи MetaMask
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    document.getElementById('mintButton').disabled = false;
+                    console.log('MetaMask connected');
+                    
+                    // Устанавливаем обработчик для кнопки "Mint NFT"
+                    document.getElementById('mintButton').onclick = async function() {
+                        const signer = provider.getSigner();
+                        const contractAddress = '0x8975e0635586C6754C8D549Db0e3C7Ee807D9C8C';
+                        const abi = [
+                            {
+                                "constant": false,
+                                "inputs": [
+                                    {
+                                        "name": "to",
+                                        "type": "address"
+                                    },
+                                    {
+                                        "name": "tokenId",
+                                        "type": "uint256"
+                                    },
+                                    {
+                                        "name": "amount",
+                                        "type": "uint256"
+                                    },
+                                    {
+                                        "name": "data",
+                                        "type": "bytes"
+                                    }
+                                ],
+                                "name": "mint",
+                                "outputs": [],
+                                "payable": false,
+                                "stateMutability": "nonpayable",
+                                "type": "function"
+                            }
+                        ];
+                        const contract = new ethers.Contract(contractAddress, abi, signer);
+                        try {
+                            const tx = await contract.mint("ваш_адрес", 1, 1, "0x");
+                            await tx.wait();
+                            console.log('Transaction successful:', tx);
+                        } catch (error) {
+                            console.error('Error minting NFT:', error);
+                        }
+                    };
+
+                } catch (error) {
+                    console.error('Error connecting MetaMask:', error);
+                }
+            } else {
+                alert('MetaMask is not installed. Please install MetaMask and try again.');
+            }
+        }
+
+        document.getElementById('connectButton').onclick = connectMetaMask;
+    </script>
+</body>
+</html>
