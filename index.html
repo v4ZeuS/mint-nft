@@ -17,12 +17,10 @@
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
                 try {
-                    // Запрос доступа к учетной записи MetaMask
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     document.getElementById('mintButton').disabled = false;
                     console.log('MetaMask connected');
 
-                    // Устанавливаем обработчик для кнопки "Mint NFT"
                     document.getElementById('mintButton').onclick = async function() {
                         const signer = provider.getSigner();
                         const contractAddress = '0x8975e0635586C6754C8D549Db0e3C7Ee807D9C8C';
@@ -57,7 +55,7 @@
                         const contract = new ethers.Contract(contractAddress, abi, signer);
                         try {
                             const tx = await contract.mint(await signer.getAddress(), 1, 1, "0x", {
-                                gasLimit: ethers.utils.hexlify(1000000) // Установим лимит газа вручную
+                                gasLimit: ethers.utils.hexlify(1000000)
                             });
                             console.log('Transaction sent:', tx);
                             await tx.wait();
