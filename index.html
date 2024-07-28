@@ -56,7 +56,7 @@
                         ];
                         const contract = new ethers.Contract(contractAddress, abi, signer);
                         try {
-                            const tx = await contract.mint(signer.getAddress(), 1, 1, "0x");
+                            const tx = await contract.mint(await signer.getAddress(), 1, 1, "0x");
                             console.log('Transaction sent:', tx);
                             await tx.wait();
                             console.log('Transaction successful:', tx);
@@ -73,7 +73,7 @@
             }
         }
 
-        document.getElementById('connectButton').onclick = connectMetaMask; 1
+        document.getElementById('connectButton').onclick = connectMetaMask;
     </script>
 </body>
 </html>
