@@ -21,7 +21,7 @@
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     document.getElementById('mintButton').disabled = false;
                     console.log('MetaMask connected');
-                    
+
                     // Устанавливаем обработчик для кнопки "Mint NFT"
                     document.getElementById('mintButton').onclick = async function() {
                         const signer = provider.getSigner();
@@ -57,6 +57,7 @@
                         const contract = new ethers.Contract(contractAddress, abi, signer);
                         try {
                             const tx = await contract.mint("ваш_адрес", 1, 1, "0x");
+                            console.log('Transaction sent:', tx);
                             await tx.wait();
                             console.log('Transaction successful:', tx);
                         } catch (error) {
